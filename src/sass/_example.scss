@@ -26,3 +26,23 @@
   background-size: cover;
   background-position: center;
 }
+.search-form {
+  background-color: #3550cb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.search-input {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.search-button {
+  background-color: rgb(167, 34, 1);
+  color: white;
+  padding: 5px;
+  &:hover {
+    background-color: green;
+  }
+}

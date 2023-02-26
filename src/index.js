@@ -1,5 +1,5 @@
 import Notiflix from 'notiflix';
-import { featchImages } from './featcher';
+import featchImages from './featcher';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css'
 
@@ -9,6 +9,7 @@ const searchButton = document.querySelector('.search-button');
 const gallery = document.querySelector('.gallery');
 const loadMore = document.querySelector('.load-more');
 console.log(gallery)
+loadMore.style.display = 'none';
 
 let per_page = 20;
 let page = 0;
@@ -17,14 +18,24 @@ let name = input.value;
 function mainEventInProject(event) {
     event.preventDefault()
     name = input.value;
-    loadMore.style.display = 'block';
+    loadMore.style.display = 'none';
     gallery.innerHTML = '';
     page = 1;
     featchImages(name, page, per_page).then(name => {
+        let totalPages = name.totalHits / per_page;
+        
         if (name.hits.length > 0) {
             createMarkup(name);
             new SimpleLightbox(".gallery a", {'captionsData': 'alt', 'captionDelay': 250});
             Notiflix.Notify.success(`Hooray! We found ${name.totalHits} images.`);
+            if (page < totalPages) {
+                loadMore.style.display = 'block';
+            } else {
+                loadMore.style.display = 'none';
+                Notiflix.Notify.info(
+                "We're sorry, but you've reached the end of search results."
+                );
+            }
         } else {
                 gallery.innerHTML = '';
                 Notiflix.Notify.failure(
@@ -81,4 +92,3 @@ function addOnePoingPage() {
         }
     })
 }
-loadMore.style.display = 'none';

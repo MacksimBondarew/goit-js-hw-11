@@ -42,13 +42,13 @@ let per_page = 20;
 let page = 0;
 let name = input.value;
 
-async function mainEventInProject(e) {
-    e.preventDefault();
+async function mainEventInProject(event) {
+    event.preventDefault()
 
     gallery.innerHTML = '';
     page = 1;
     name = input.value;
-
+    console.log(123);
     featchImages(name, page, per_page).then(name =>{
         let totalPages = name.totalHits / per_page;
 

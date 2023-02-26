@@ -8,8 +8,7 @@ const input = document.querySelector('.search-input');
 const searchButton = document.querySelector('.search-button');
 const gallery = document.querySelector('.gallery');
 const loadMore = document.querySelector('.load-more');
-
-loadMore.style.display = 'none';
+console.log(gallery)
 
 let per_page = 20;
 let page = 0;
@@ -17,25 +16,15 @@ let name = input.value;
 
 function mainEventInProject(event) {
     event.preventDefault()
-    loadMore.style.display = 'none';
-    gallery.innerHTML = '';
     name = input.value;
+    loadMore.style.display = 'block';
+    gallery.innerHTML = '';
     page = 1;
     featchImages(name, page, per_page).then(name => {
-        let totalPages = name.totalHits / per_page;
-        
-        if (name.hits.lenght > 0) {
+        if (name.hits.length > 0) {
             createMarkup(name);
-            new SimpleLightbox(".gallery a");
+            new SimpleLightbox(".gallery a", {'captionsData': 'alt', 'captionDelay': 250});
             Notiflix.Notify.success(`Hooray! We found ${name.totalHits} images.`);
-            if (page < totalPages) {
-                loadMore.style.display = 'block';
-            } else {
-                loadMore.style.display = 'none';
-                Notiflix.Notify.info(
-                "We're sorry, but you've reached the end of search results."
-                );
-            }
         } else {
                 gallery.innerHTML = '';
                 Notiflix.Notify.failure(
@@ -51,13 +40,14 @@ form.addEventListener('submit', mainEventInProject);
 
 function createMarkup(name) {
     const markup = name.hits.map(hit => { 
-        return `<div class="photo-card">
+        return `
+        <div class="photo-card">
             <a href='${hit.largeImageURL}'>
                 <img src="${hit.webformatURL}" alt="${hit.tags}" loading="lazy" />
             </a>
             <div class="info">
                 <p class="info-item">
-                    <b>likes</b>${hit.likes}
+                    <b>likes</b>${hit.likes.toLocaleString()}
                 </p>
                 <p class="info-item">
                     <b>views</b>${hit.views}
@@ -66,12 +56,29 @@ function createMarkup(name) {
                     <b>comments</b>${hit.comments}
                 </p>
                 <p class="info-item">
-                    <b> dowloands </b>${hit.dowloands}
+                    <b> dowloads </b>${hit.downloads}
                 </p>
             </div>
         </div>`
     }).join('');
-    gallery.insertAdjacentElement('beforeend', markup);
+    // gallery.innerHTML = markup;
+    gallery.insertAdjacentHTML('beforeend', markup)
 };
 
+//function + 1 page if користувач хоче ще зображень
 
+loadMore.addEventListener('click', addOnePoingPage);
+
+function addOnePoingPage() {
+    page += 1;
+    featchImages (name, page, per_page).then(name => {
+        let totalPages = name.totalHits / per_page;
+        createMarkup(name);
+        new SimpleLightbox(".gallery a", {'captionsData': 'alt', 'captionDelay': 250});
+        if (page >= totalPages) {
+            loadMore.style.display = 'none';
+            Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+        }
+    })
+}
+loadMore.style.display = 'none';

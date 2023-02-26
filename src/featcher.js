@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function featchCountry(name, page, perPage) {
+export default async function featchImages(name, page, perPage) {
     const library = 'https://pixabay.com/api/';
     const key = '33933963-4f485d9798c483eb0ad8732f3';
     try {

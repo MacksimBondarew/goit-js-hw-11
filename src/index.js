@@ -11,47 +11,19 @@ const loadMore = document.querySelector('.load-more');
 
 loadMore.style.display = 'none';
 
-//function create markup img
-
-function createMarkup(name) {
-    const markup = name.hits.map(hit => { 
-        return `<div class="photo-card">
-            <a href='${hit.largeImageURL}'>
-                <img src="${hit.webformatURL}" alt="${hit.tags}" loading="lazy" />
-            </a>
-            <div class="info">
-                <p class="info-item">
-                    <b>${hit.likes}</b>
-                </p>
-                <p class="info-item">
-                    <b>${hit.views}</b>
-                </p>
-                <p class="info-item">
-                    <b>${hit.comments}</b>
-                </p>
-                <p class="info-item">
-                    <b>${hit.dowloands}</b>
-                </p>
-            </div>
-        </div>`
-    }).join('');
-    gallery.insertAdjacentElement('beforeend', markup);
-};
-
 let per_page = 20;
 let page = 0;
 let name = input.value;
 
-async function mainEventInProject(event) {
+function mainEventInProject(event) {
     event.preventDefault()
-
+    loadMore.style.display = 'none';
     gallery.innerHTML = '';
-    page = 1;
     name = input.value;
-    console.log(123);
-    featchImages(name, page, per_page).then(name =>{
+    page = 1;
+    featchImages(name, page, per_page).then(name => {
         let totalPages = name.totalHits / per_page;
-
+        
         if (name.hits.lenght > 0) {
             createMarkup(name);
             new SimpleLightbox(".gallery a");
@@ -74,3 +46,32 @@ async function mainEventInProject(event) {
 }
 
 form.addEventListener('submit', mainEventInProject);
+
+//function create markup img
+
+function createMarkup(name) {
+    const markup = name.hits.map(hit => { 
+        return `<div class="photo-card">
+            <a href='${hit.largeImageURL}'>
+                <img src="${hit.webformatURL}" alt="${hit.tags}" loading="lazy" />
+            </a>
+            <div class="info">
+                <p class="info-item">
+                    <b>likes</b>${hit.likes}
+                </p>
+                <p class="info-item">
+                    <b>views</b>${hit.views}
+                </p>
+                <p class="info-item">
+                    <b>comments</b>${hit.comments}
+                </p>
+                <p class="info-item">
+                    <b> dowloands </b>${hit.dowloands}
+                </p>
+            </div>
+        </div>`
+    }).join('');
+    gallery.insertAdjacentElement('beforeend', markup);
+};
+
+

@@ -1,5 +1,5 @@
 import Notiflix from 'notiflix';
-import featchImages from './featcher';
+import { featchImages } from './featcher';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css'
 

@@ -73,4 +73,4 @@ async function mainEventInProject(event) {
     }).catch(error => console.log('ERROR: ' + error));
 }
 
-searchButton.addEventListener('submit', mainEventInProject);
+form.addEventListener('submit', mainEventInProject);

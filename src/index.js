@@ -57,9 +57,9 @@ async function mainEventInProject(event) {
             new SimpleLightbox(".gallery a");
             Notiflix.Notify.success(`Hooray! We found ${name.totalHits} images.`);
             if (page < totalPages) {
-                loadBtn.style.display = 'block';
+                loadMore.style.display = 'block';
             } else {
-                loadBtn.style.display = 'none';
+                loadMore.style.display = 'none';
                 Notiflix.Notify.info(
                 "We're sorry, but you've reached the end of search results."
                 );

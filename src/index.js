@@ -1,32 +1,35 @@
 import Notiflix from 'notiflix';
-import featchImages from './featcher';
+import featchImages from './java_script/featcher';
 import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css'
+import 'simplelightbox/dist/simple-lightbox.min.css';
+import NewsApiService from './java_script/news-service';
 
 const form = document.querySelector('#search-form');
 const input = document.querySelector('.search-input');
-const searchButton = document.querySelector('.search-button');
 const gallery = document.querySelector('.gallery');
 const loadMore = document.querySelector('.load-more');
-console.log(gallery)
 loadMore.style.display = 'none';
 
-let per_page = 20;
+const lightbox = () => {
+    return new SimpleLightbox(".gallery a", {'captionsData': 'alt', 'captionDelay': 250})
+}
+const newsApiService = new NewsApiService;
+
+let per_page = 40;
 let page = 0;
-let name = input.value;
+
 
 function mainEventInProject(event) {
     event.preventDefault()
-    name = input.value;
+    newsApiService.query = input.value;
     loadMore.style.display = 'none';
     gallery.innerHTML = '';
     page = 1;
-    featchImages(name, page, per_page).then(name => {
+    featchImages(newsApiService.query, page, per_page).then(name => {
         let totalPages = name.totalHits / per_page;
-        
         if (name.hits.length > 0) {
             createMarkup(name);
-            new SimpleLightbox(".gallery a", {'captionsData': 'alt', 'captionDelay': 250});
+            lightbox();
             Notiflix.Notify.success(`Hooray! We found ${name.totalHits} images.`);
             if (page < totalPages) {
                 loadMore.style.display = 'block';
@@ -44,10 +47,6 @@ function mainEventInProject(event) {
         }  
     }).catch(error => console.log('ERROR: ' + error));
 }
-
-form.addEventListener('submit', mainEventInProject);
-
-//function create markup img
 
 function createMarkup(name) {
     const markup = name.hits.map(hit => { 
@@ -72,23 +71,22 @@ function createMarkup(name) {
             </div>
         </div>`
     }).join('');
-    // gallery.innerHTML = markup;
     gallery.insertAdjacentHTML('beforeend', markup)
 };
 
-//function + 1 page if користувач хоче ще зображень
-
-loadMore.addEventListener('click', addOnePoingPage);
-
 function addOnePoingPage() {
-    page += 1;
-    featchImages (name, page, per_page).then(name => {
+    newsApiService.resetPage();
+    newsApiService.query = input.value;
+    featchImages (newsApiService.query, page, per_page).then(name => {
         let totalPages = name.totalHits / per_page;
         createMarkup(name);
-        new SimpleLightbox(".gallery a", {'captionsData': 'alt', 'captionDelay': 250});
+        lightbox();
         if (page >= totalPages) {
             loadMore.style.display = 'none';
             Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
         }
     })
 }
+
+loadMore.addEventListener('click', addOnePoingPage);
+form.addEventListener('submit', mainEventInProject);

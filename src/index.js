@@ -75,7 +75,7 @@ function createMarkup(name) {
 };
 
 function addOnePoingPage() {
-    newsApiService.resetPage();
+    newsApiService.incrementPage();
     newsApiService.query = input.value;
     featchImages (newsApiService.query, page, per_page).then(name => {
         let totalPages = name.totalHits / per_page;

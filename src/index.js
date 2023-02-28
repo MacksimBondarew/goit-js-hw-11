@@ -10,9 +10,7 @@ const gallery = document.querySelector('.gallery');
 const loadMore = document.querySelector('.load-more');
 loadMore.style.display = 'none';
 
-const lightbox = () => {
-    return new SimpleLightbox(".gallery a", {'captionsData': 'alt', 'captionDelay': 250})
-}
+const lightbox = new SimpleLightbox(".gallery a", {'captionsData': 'alt', 'captionDelay': 250});
 const newsApiService = new NewsApiService;
 
 let per_page = 40;
@@ -29,7 +27,7 @@ function mainEventInProject(event) {
         let totalPages = name.totalHits / per_page;
         if (name.hits.length > 0) {
             createMarkup(name);
-            lightbox();
+            lightbox.refresh();
             Notiflix.Notify.success(`Hooray! We found ${name.totalHits} images.`);
             if (page < totalPages) {
                 loadMore.style.display = 'block';
@@ -80,7 +78,7 @@ function addOnePoingPage() {
     featchImages (newsApiService.query, page, per_page).then(name => {
         let totalPages = name.totalHits / per_page;
         createMarkup(name);
-        lightbox();
+        lightbox.refresh();
         if (page >= totalPages) {
             loadMore.style.display = 'none';
             Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");

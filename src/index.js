@@ -79,7 +79,7 @@ function addOnePoingPage() {
         let totalPages = name.totalHits / per_page;
         createMarkup(name);
         lightbox.refresh();
-        if (page >= totalPages) {
+        if (page > totalPages) {
             loadMore.style.display = 'none';
             Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
         }

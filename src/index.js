@@ -1,7 +1,7 @@
 import Notiflix from 'notiflix';
 import featchImages from './java_script/featcher';
 import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+import 'simplelightbox/dist/simple-lightbox.min.css'
 import NewsApiService from './java_script/news-service';
 
 const form = document.querySelector('#search-form');
